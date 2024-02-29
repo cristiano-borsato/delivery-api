@@ -113,7 +113,7 @@ RSpec.describe "/stores", type: :request do
         patch store_url(store), params: { store: new_attributes }
         store.reload
         expect(store.name).to eq "great store"
-       # expect(store.name).to eq new_attributes[:name]
+      # expect(store.name).to eq new_attributes[:name]
       end
 
       it "redirects to the store" do
