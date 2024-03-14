@@ -67,3 +67,4 @@ end
 gem "shoulda-matchers"
 
 gem "faker"
+gem "devise", "~> 4.9"
