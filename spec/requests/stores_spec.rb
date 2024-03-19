@@ -22,8 +22,16 @@ RSpec.describe "/stores", type: :request do
   #   skip("Add a hash of attributes valid for your model")
   # }
 
+  let(:user){
+    user = User.new(
+      email: "user@example.com", password: "123456", password_confirmation: "123456"
+    )
+    user.save!
+    user
+  }
+
   let(:valid_attributes) {
-    {name: "Great Restaurant"}
+    {name: "Great Restaurant", user: user}
   }
 
   # let(:invalid_attributes) {
@@ -34,6 +42,10 @@ RSpec.describe "/stores", type: :request do
     {name: nil}
   }
 
+  before {
+    sign_in(user)
+  }
+  
   describe "GET /index" do
     it "renders a successful response" do
       Store.create! valid_attributes
