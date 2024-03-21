@@ -8,20 +8,30 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-user = User.find_by(email: "store@example.com")
+admin = User.find_by(email: "admin@example.com")
 
-if !user
-    user = User.new(
-        email: "store@example.com",
+if !admin
+    admin = User.new(
+        email: "admin@example.com",
         password: "123456",
-        password_confirmation: "123456"
+        password_confirmation: "123456",
+        role: :admin
     )
-    user.save!
+    admin.save!
 end
 
 ["Orange Curry", "Belly King"]. each do |store|
+    user = User.new(
+        email: "#{store.split.map { |s| s.downcase }.join(".")}@example.com",
+        password: "123456",
+        password_confirmation: "123456",
+        role: :seller
+    )
+    user.save!
+
     Store.find_or_create_by!(name: store, user: user)
 end
+
 
 ["Massaman Curry", 
 "Risotto with Seafood", 
