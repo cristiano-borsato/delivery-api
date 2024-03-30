@@ -7,9 +7,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   def self.from_token(token)  
-    decoded_token = JWT.decode(token, "muito.secreto", true, algorithm: "HS256")   
-    user_id = decoded_token[0]["id"]       
-    user = User.find_by(id: user_id) 
+    decoded = JWT.decode(token, "muito.secreto", true, {algorithm: "HS256"})
+    user_data = decoded[0].with_indifferent_access
+    User.find(user_data[:id])
   end
 
   def self.token_for(user)

@@ -3,12 +3,9 @@ class RegistrationsController < ApplicationController
     before_action :authenticate!, only: [:me]
 
     def me
-        user = User.from_token(request.headers["Authorization"].split(" ").last)
-        if user
-          render json: { id: user.id, email: user.email, role: user.role }, status: :ok
-        else
-          render json: { message: "User not found" }, status: :not_found
-        end
+        render json: {
+        id: current_user.id, email: current_user.email
+        }
     end
 
     def sign_in
