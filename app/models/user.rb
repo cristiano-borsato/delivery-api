@@ -6,7 +6,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-
+  JWT_SECRET = Rails.application.credentials.secret_key_base
+  
   # def self.from_token(token)  
   #   decoded = JWT.decode(token, "muito.secreto", true, {algorithm: "HS256"})
   #   user_data = decoded[0].with_indifferent_access
@@ -16,7 +17,8 @@ class User < ApplicationRecord
   def self.from_token(token)
     decoded = JWT.decode(token, "muito.secreto", true, {algorithm: "HS256"})
     user_data = decoded[0].with_indifferent_access
-    User.find(user_data[:id])
+    # User.find(user_data[:id])
+    User.new(id: user_data[:id], email: user_data[:email], role: user_data[:role])
   rescue JWT::ExpiredSignature
     raise InvalidToken.new
   end
