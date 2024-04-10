@@ -70,3 +70,5 @@ gem "faker"
 gem "devise", "~> 4.9"
 
 gem "jwt", "~> 2.8"
+
+gem "rack-cors", "~> 2.0"
