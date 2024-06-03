@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   post "new" => "registrations#create", as: :create_registration
   get "me" => "registrations#me"
   post "sign_in" => "registrations#sign_in"
-  
+
+  resources :products, only: [:index, :new, :create, :show, :edit, :update]
+   
 
   # Defines the root path route ("/")
   # root "posts#index"

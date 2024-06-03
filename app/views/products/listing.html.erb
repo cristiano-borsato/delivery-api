@@ -3,7 +3,11 @@
 <div>
     <% @products.each do |product| %>
         <div>
-            <h3><%= product.title %></h3>
+            <h3>
+                <%= product.title %>
+                <%= number_to_currency(product.price, unit: "R$ ", separator: ",", delimiter: ".") %>
+            </h3>
+           
             <p>Store: <%= product.store.name %>
         </div>
         <hr>
