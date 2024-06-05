@@ -24,7 +24,6 @@ class ProductsController < ApplicationController
       else
         @stores = current_user.stores
       end
-      puts @stores.ids
     end
 
     def show

@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   post "sign_in" => "registrations#sign_in"
 
   resources :products, only: [:index, :new, :create, :show, :edit, :update]
+
+  scope :buyers do
+    resources :orders, only: [:index, :create, :update, :destroy]
+  end
    
 
   # Defines the root path route ("/")
