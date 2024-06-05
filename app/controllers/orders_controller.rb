@@ -17,6 +17,11 @@ class OrdersController < ApplicationController
     end
   end
 
+  def show
+    @order = Order.find(params[:id])
+    render json: {order: @order, order_items: @order.order_items}
+  end
+
   def index
     @orders = Order.where(buyer: current_user)    
   end
@@ -25,6 +30,7 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit([:store_id])
+    params.require(:order).permit(:store_id, 
+      order_items_attributes: [:id, :product_id, :amount, :price, :_destroy])
   end
 end
