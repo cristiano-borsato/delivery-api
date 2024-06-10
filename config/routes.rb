@@ -11,8 +11,12 @@ Rails.application.routes.draw do
 
   scope :buyers do
     resources :orders, only: [:index, :create, :update, :destro, :show]
-  end
-   
+  end  
+ 
+  resources :stores do
+    get 'products', to: 'products#products_by_store'
+  end 
+
 
   # Defines the root path route ("/")
   # root "posts#index"

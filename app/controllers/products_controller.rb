@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-    before_action :authenticate_user!
+  before_action :authenticate!
 
     def listing
         if !current_user.admin?
@@ -13,6 +13,11 @@ class ProductsController < ApplicationController
         @products = Product.includes(:store)
       else
         @products = current_user.stores.includes(:products).flat_map(&:products)
+      end
+
+      respond_to do |format|
+        format.html
+        format.json { render json: @products }
       end
     end   
     
@@ -58,6 +63,22 @@ class ProductsController < ApplicationController
         render :edit
       end
     end
+
+    def products_by_store
+      @store = Store.find(params[:store_id])
+      if current_user.admin? || current_user.stores.include?(@store)
+        @products = @store.products
+      else
+        redirect_to root_path, notice: "No permission for you!"
+      end
+
+      respond_to do |format|
+        format.html
+        # format.json { render json: @products }        
+        format.json { render json: { store: @store, products: @products } }
+      end
+    end
+  
     
     private
   
