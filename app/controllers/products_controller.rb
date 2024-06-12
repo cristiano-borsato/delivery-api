@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
-  before_action :authenticate!
+  skip_forgery_protection
+  before_action :authenticate!  
 
     def listing
         if !current_user.admin?
@@ -33,6 +34,11 @@ class ProductsController < ApplicationController
 
     def show
       @product = Product.find(params[:id])
+
+      respond_to do |format|
+        format.html
+        format.json { render json: @product }
+      end
     end
 
     def create
@@ -51,16 +57,20 @@ class ProductsController < ApplicationController
         @stores = Store.all
       else
         @stores = current_user.stores
-      end
-    end
+      end      
+    end    
 
     def update
       @product = Product.find(params[:id])
-  
-      if @product.update(product_params)
-        redirect_to product_path(@product), notice: 'Product was successfully updated.'
-      else
-        render :edit
+    
+      respond_to do |format|
+        if @product.update(product_params)
+          format.html { redirect_to product_path(@product), notice: 'Product was successfully updated.' }
+          format.json { render json: @product }
+        else
+          format.html { render :edit }
+          format.json { render json: @product.errors, status: :unprocessable_entity }
+        end
       end
     end
 

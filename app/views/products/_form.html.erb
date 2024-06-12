@@ -20,11 +20,13 @@
     <%= form.label :price %>
     <%= form.text_field :price %>
   </div>
+ 
+ <div class="field">
+  <%= form.label :store_id, "Store" %>
+  <%= text_field_tag :store_name, @product.store.name, readonly: true %>
+  <%= form.hidden_field :store_id, value: @product.store_id %>
+</div>
 
-  <div class="field">
-    <%= form.label :store_id, "Store" %>
-    <%= form.collection_select :store_id, @stores, :id, :name %>
-  </div>
 
   <div class="actions">
     <%= form.submit %>
