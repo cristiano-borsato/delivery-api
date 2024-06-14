@@ -10,7 +10,7 @@ class ProductsController < ApplicationController
     end
 
     def index
-      if current_user.admin?
+      if current_user.admin? 
         @products = Product.includes(:store)
       else
         @products = current_user.stores.includes(:products).flat_map(&:products)
@@ -74,17 +74,31 @@ class ProductsController < ApplicationController
       end
     end
 
+    # def products_by_store
+    #   @store = Store.find(params[:store_id])
+    #   if current_user.admin? || current_user.stores.include?(@store)
+    #     @products = @store.products
+    #   else
+    #     redirect_to root_path, notice: "No permission for you!"
+    #   end
+
+    #   respond_to do |format|
+    #     format.html
+    #     # format.json { render json: @products }        
+    #     format.json { render json: { store: @store, products: @products } }
+    #   end
+    # end
+
     def products_by_store
       @store = Store.find(params[:store_id])
-      if current_user.admin? || current_user.stores.include?(@store)
+      if current_user.admin? || current_user.buyer? || current_user.stores.include?(@store)
         @products = @store.products
       else
         redirect_to root_path, notice: "No permission for you!"
       end
-
+    
       respond_to do |format|
         format.html
-        # format.json { render json: @products }        
         format.json { render json: { store: @store, products: @products } }
       end
     end
