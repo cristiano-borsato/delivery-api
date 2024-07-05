@@ -15,6 +15,7 @@ Rails.application.routes.draw do
  
   resources :stores do
     get 'products', to: 'products#products_by_store'
+    get "/orders/new" => "stores#new_order"
   end 
 
 
