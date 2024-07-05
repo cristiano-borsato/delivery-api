@@ -76,3 +76,5 @@ gem "rack-cors", "~> 2.0"
 gem "state_machines-activerecord", "~> 0.9.0"
 
 gem "eventmachine", "~> 1.2"
+
+gem "rdoc", ">= 6.6.3.1"
