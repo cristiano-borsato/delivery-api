@@ -73,43 +73,19 @@ class StoresController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  # def new_order
-  #   response.headers['Content-Type'] = "text/event-stream"
-  #   sse = SSE.new(response.stream, retry: 300, event: "waiting-orders")
-  #   sse.write({hello: "world!"}, event: "waiting-order")
-   
-  #   # loop do
-  #   #   sleep(2)
-  #   #   order = Order.where(store_id: params[:store_id], status: :created)
-  #   #   sse.write({order: order}, event: "new-order")
-  #   # end
-
-  #   10.times do |counter|
-  #     sleep(2)
-  #     sse.write({order: Order.last}, event: "new-order")
-  #   end
-
-  # rescue ActionController::Live::ClientDisconnected
-  #   sse.close
-  # ensure
-  #   sse.close
-  # end
-
+ 
   def new_order
     response.headers["Content-Type"] = "text/event-stream"
     sse = SSE.new(response.stream, retry: 300, event: "waiting-orders")
-    sse.write({hello: "world!"}, event: "waiting-order")
-
+  
     EventMachine.run do
       EventMachine::PeriodicTimer.new(3) do
-        order = Order.last
-        #order = Order.where(store_id: params[:store_id], status: :created)
-        if order
-          message = { time: Time.now, order: order }
+        orders = Order.where(store_id: params[:store_id], state: :created)
+        if orders.any?
+          message = { time: Time.now, orders: orders }
           sse.write(message, event: "new-order")
         else
-          sse.write(message, event: "no")
+          sse.write({}, event: "no-orders")
         end
       end
     end
@@ -118,6 +94,7 @@ class StoresController < ApplicationController
   ensure
     sse.close
   end
+  
 
 
   private
